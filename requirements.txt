@@ -1,0 +1,23 @@
+# SpendSense API Dependencies - Optimized for Vercel Serverless Functions
+# This minimal set keeps the function under 250MB limit
+
+# Core FastAPI (required)
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+pydantic==2.5.0
+python-dotenv==1.0.0
+
+# Authentication & Database (required)
+firebase-admin==6.2.0
+PyJWT==2.8.0
+
+# AI Chat (required for chat endpoints)
+openai==1.12.0
+
+# NOTE: The following are excluded to reduce bundle size:
+# - pandas (100+ MB) - used in compute features, not critical for read-only endpoints
+# - guardrails-ai (40+ MB) - made optional via fallback validation
+# - faker - only for data generation
+# - pytest/pytest-asyncio - test dependencies
+
+

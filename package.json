@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "firebase": "^12.5.0",
+    "dotenv": "^16.0.0"
+  }
+}
