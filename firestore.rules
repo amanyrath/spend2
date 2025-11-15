@@ -1,0 +1,65 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper function to check if user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Helper function to check if user owns the document
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Users collection
+    match /users/{userId} {
+      // Users can read their own profile
+      allow read: if isOwner(userId);
+      // Users can create/update their own profile
+      allow write: if isOwner(userId);
+
+      // Accounts subcollection
+      match /accounts/{accountId} {
+        allow read: if isOwner(userId);
+        allow write: if false; // Read-only for users
+      }
+
+      // Transactions subcollection
+      match /transactions/{transactionId} {
+        allow read: if isOwner(userId);
+        allow write: if false; // Read-only for users
+      }
+
+      // Computed features subcollection
+      match /computed_features/{featureId} {
+        allow read: if isOwner(userId);
+        allow write: if false; // Read-only for users
+      }
+
+      // Persona assignments subcollection
+      match /persona_assignments/{assignmentId} {
+        allow read: if isOwner(userId);
+        allow write: if false; // Read-only for users
+      }
+
+      // Recommendations subcollection
+      match /recommendations/{recommendationId} {
+        allow read: if isOwner(userId);
+        allow write: if false; // Read-only for users
+      }
+
+      // Consent records subcollection
+      match /consent_records/{consentId} {
+        allow read: if isOwner(userId);
+        allow create: if isOwner(userId);
+        allow update: if isOwner(userId);
+      }
+    }
+
+    // Deny all other access
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
